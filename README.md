@@ -7,9 +7,8 @@ An interactive 3D particle simulator that visualizes atomic diffusion governed b
 
 ## Demo
 
-https://github.com/user-attachments/assets/demo.mp4
 
-> *If the video doesn't render above, download [screenshots/demo.mp4](screenshots/demo.mp4) directly.*
+<video controls src="https://github.com/user-attachments/assets/demo.mp4" title="path/to/video.mp4"></video>
 
 ---
 
