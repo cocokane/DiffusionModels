@@ -172,4 +172,4 @@ This is a personal project, feel free to use it however you'd like.
 
 ---
 
-*Made by [Yash Kokane](https://github.com/yashkokane) using [Antigravity](https://antigravity.dev) — for the Kinetics course at RPI, taught by Prof. Jian Shi.*
+*Made by [Yash Kokane](https://github.com/cocokane) using [Antigravity](https://antigravity.google/) — for the Kinetics course at [RPI](https://www.rpi.edu/), taught by [Prof. Jian Shi](https://faculty.rpi.edu/jian-shi).* 
