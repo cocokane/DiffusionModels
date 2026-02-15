@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fick's Law — Diffusion Simulator</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0a0a1a;
+      --bg-panel: rgba(20, 20, 50, 0.7);
+      --border: rgba(100, 120, 255, 0.15);
+      --text: #e0e4f0;
+      --dim: #8890b0;
+      --cyan: #00d4ff;
+      --amber: #ff9f43;
+      --pink: #ff6b9d;
+      --green: #2ecc71;
+      --purple: #9b59b6;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, var(--bg) 0%, #0d1030 50%, var(--bg) 100%);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 210px;
+      flex-shrink: 0;
+      background: rgba(8, 8, 26, 0.95);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 12px;
+      gap: 12px;
+    }
+
+    .sidebar-logo {
+      text-align: center;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-logo h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--cyan), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sidebar-logo span {
+      font-size: 0.65rem;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .sidebar-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--dim);
+      margin-top: 4px;
+    }
+
+    .case-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 10px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      transition: all .2s;
+    }
+
+    .case-btn:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border);
+    }
+
+    .case-btn.active {
+      background: rgba(0, 212, 255, 0.08);
+      border-color: var(--cyan);
+    }
+
+    .case-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.82rem;
+      flex-shrink: 0;
+    }
+
+    .case-btn[data-case="1"] .case-num {
+      background: rgba(255, 107, 157, 0.18);
+      color: var(--pink);
+    }
+
+    .case-btn[data-case="2"] .case-num {
+      background: rgba(46, 204, 113, 0.18);
+      color: var(--green);
+    }
+
+    .case-btn[data-case="3"] .case-num {
+      background: rgba(155, 89, 182, 0.18);
+      color: var(--purple);
+    }
+
+    .case-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .case-desc {
+      font-size: 0.65rem;
+      color: var(--dim);
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 18px 20px 6px;
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--cyan), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .equation-header {
+      margin-top: 8px;
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+
+    .param-legend {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(100, 120, 255, 0.2);
+      border-radius: 10px;
+      padding: 8px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      justify-content: center;
+      min-width: 180px;
+    }
+
+    .param-legend .param-legend-title {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--dim);
+      margin-bottom: 2px;
+      font-weight: 600;
+    }
+
+    .param-legend .param-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 0.72rem;
+      line-height: 1.5;
+    }
+
+    .param-legend .param-sym {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--amber);
+      font-weight: 500;
+      white-space: nowrap;
+      min-width: 52px;
+    }
+
+    .param-legend .param-desc {
+      color: var(--dim);
+    }
+
+    .eq-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 6px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .eq-card .eq-label {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--dim);
+    }
+
+    .eq-card .eq-math {
+      font-size: 0.98rem;
+    }
+
+    .eq-card .katex,
+    .eq-card .katex .mord,
+    .eq-card .katex .mrel,
+    .eq-card .katex .mop,
+    .eq-card .katex .mbin,
+    .eq-card .katex .mopen,
+    .eq-card .katex .mclose,
+    .eq-card .katex .mpunct,
+    .eq-card .katex .minner {
+      color: var(--amber) !important;
+    }
+
+    .bc-tags {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .bc-tag {
+      font-size: 0.68rem;
+      color: var(--dim);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+      padding: 2px 8px;
+    }
+
+    .bc-tag .katex {
+      font-size: 0.76rem !important;
+    }
+
+    /* Layout */
+    .sim-layout {
+      display: flex;
+      gap: 0;
+      padding: 8px 14px;
+      flex: 0 0 auto;
+    }
+
+    .viewport-container {
+      flex: 1;
+      position: relative;
+      border-radius: 14px 0 0 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #08081a;
+      min-height: 400px;
+    }
+
+    .viewport-container canvas {
+      display: block;
+    }
+
+    .viewport-label {
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      pointer-events: none;
+      opacity: .8;
+    }
+
+    .time-display {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      color: var(--green);
+      pointer-events: none;
+    }
+
+    .atom-count-display {
+      position: absolute;
+      bottom: 10px;
+      left: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--dim);
+      pointer-events: none;
+    }
+
+    /* Controls */
+    .controls-panel {
+      width: 260px;
+      padding: 16px;
+      background: var(--bg-panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .controls-panel h2 {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--cyan);
+      font-weight: 600;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .control-group label {
+      font-size: 0.76rem;
+      color: var(--dim);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .control-group label span.val {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--amber);
+      font-weight: 500;
+      font-size: 0.76rem;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.08);
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px rgba(0, 212, 255, .5);
+      cursor: pointer;
+      transition: transform .15s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    .derived-values {
+      background: rgba(0, 212, 255, 0.06);
+      border: 1px solid rgba(0, 212, 255, 0.15);
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .derived-values .row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.74rem;
+    }
+
+    .derived-values .row .label {
+      color: var(--dim);
+    }
+
+    .derived-values .row .value {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--cyan);
+      font-weight: 500;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 9px 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, .1);
+      border-color: var(--cyan);
+    }
+
+    .btn.active {
+      background: rgba(0, 212, 255, .15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    /* Plot */
+    .plot-section {
+      padding: 8px 14px 6px;
+    }
+
+    .plot-container {
+      background: var(--bg-panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .plot-container h3 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--cyan);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .plot-canvas-wrap {
+      width: 100%;
+      height: 240px;
+      position: relative;
+    }
+
+    .plot-canvas-wrap canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .legend {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      margin-top: 8px;
+      font-size: 0.73rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .legend-swatch {
+      width: 18px;
+      height: 4px;
+      border-radius: 2px;
+    }
+
+    /* Footer */
+    .footer-banner {
+      text-align: center;
+      padding: 16px 14px;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--dim);
+    }
+
+    .footer-banner .name {
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--cyan), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-banner .tool {
+      font-weight: 600;
+      color: var(--amber);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── SIDEBAR ── -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <h2>Fick's Law</h2>
+      <span>Diffusion Simulator</span>
+    </div>
+    <div class="sidebar-label">Simulations</div>
+    <button class="case-btn active" data-case="1">
+      <div class="case-num">1</div>
+      <div>
+        <div class="case-title">Semi-Infinite</div>
+        <div class="case-desc">Fixed surface C₀</div>
+      </div>
+    </button>
+    <button class="case-btn" data-case="2">
+      <div class="case-num">2</div>
+      <div>
+        <div class="case-title">Planar Source</div>
+        <div class="case-desc">Infinite medium</div>
+      </div>
+    </button>
+    <button class="case-btn" data-case="3">
+      <div class="case-num">3</div>
+      <div>
+        <div class="case-title">Thin Film</div>
+        <div class="case-desc">Semi-infinite body</div>
+      </div>
+    </button>
+  </nav>
+
+  <!-- ── MAIN CONTENT ── -->
+  <div class="main-content">
+
+    <!-- Case 1 Header -->
+    <header class="case-header" data-case="1">
+      <h1>Case 1 — Semi-Infinite Diffusion</h1>
+      <div class="equation-header">
+        <div class="param-legend">
+          <div class="param-legend-title">Parameters</div>
+          <div class="param-row"><span class="param-sym">C(x,t)</span><span class="param-desc">— concentration
+              profile</span></div>
+          <div class="param-row"><span class="param-sym">C₀</span><span class="param-desc">— surface
+              concentration</span></div>
+          <div class="param-row"><span class="param-sym">D</span><span class="param-desc">— diffusion coefficient</span>
+          </div>
+          <div class="param-row"><span class="param-sym">√(2Dt)</span><span class="param-desc">— diffusion length
+              estimate</span></div>
+        </div>
+        <div class="eq-card"><span class="eq-label">Solution</span><span
+            class="eq-math">$C(x,t)=C_0\;\text{erfc}\!\left(\dfrac{x}{2\sqrt{Dt}}\right)$</span></div>
+        <div class="eq-card"><span class="eq-label">Diffusivity</span><span
+            class="eq-math">$D=\dfrac{\Gamma\,\lambda^2}{6}$</span></div>
+      </div>
+      <div class="bc-tags">
+        <span class="bc-tag">$C(0,t)=C_0$ (fixed surface)</span>
+        <span class="bc-tag">$C(x,0)=0$ (initial)</span>
+        <span class="bc-tag">$C(\infty,t)=0$</span>
+      </div>
+    </header>
+
+    <!-- Case 2 Header -->
+    <header class="case-header" data-case="2" style="display:none">
+      <h1>Case 2 — Instantaneous Planar Source</h1>
+      <div class="equation-header">
+        <div class="param-legend">
+          <div class="param-legend-title">Parameters</div>
+          <div class="param-row"><span class="param-sym">C(x,t)</span><span class="param-desc">— concentration
+              profile</span></div>
+          <div class="param-row"><span class="param-sym">M</span><span class="param-desc">— mass per unit area</span>
+          </div>
+          <div class="param-row"><span class="param-sym">D</span><span class="param-desc">— diffusion coefficient</span>
+          </div>
+          <div class="param-row"><span class="param-sym">√(2Dt)</span><span class="param-desc">— diffusion length
+              estimate</span></div>
+        </div>
+        <div class="eq-card"><span class="eq-label">Solution</span><span class="eq-math">$C(x,t)=\dfrac{M}{2\sqrt{\pi D
+            t}}\;\exp\!\left(-\dfrac{x^2}{4Dt}\right)$</span></div>
+        <div class="eq-card"><span class="eq-label">Diffusivity</span><span
+            class="eq-math">$D=\dfrac{\Gamma\,\lambda^2}{6}$</span></div>
+      </div>
+      <div class="bc-tags">
+        <span class="bc-tag">$C(x,0)=0$</span>
+        <span class="bc-tag">$C(\pm\infty,t)=0$</span>
+        <span class="bc-tag">$\int_{-\infty}^{+\infty}C\,dx=M$</span>
+      </div>
+    </header>
+
+    <!-- Case 3 Header -->
+    <header class="case-header" data-case="3" style="display:none">
+      <h1>Case 3 — Thin Film Geometry</h1>
+      <div class="equation-header">
+        <div class="param-legend">
+          <div class="param-legend-title">Parameters</div>
+          <div class="param-row"><span class="param-sym">C(x,t)</span><span class="param-desc">— concentration
+              profile</span></div>
+          <div class="param-row"><span class="param-sym">M</span><span class="param-desc">— mass per unit area</span>
+          </div>
+          <div class="param-row"><span class="param-sym">D</span><span class="param-desc">— diffusion coefficient</span>
+          </div>
+          <div class="param-row"><span class="param-sym">√(2Dt)</span><span class="param-desc">— diffusion length
+              estimate</span></div>
+        </div>
+        <div class="eq-card"><span class="eq-label">Solution</span><span class="eq-math">$C(x,t)=\dfrac{M}{\sqrt{\pi D
+            t}}\;\exp\!\left(-\dfrac{x^2}{4Dt}\right)$</span></div>
+        <div class="eq-card"><span class="eq-label">Diffusivity</span><span
+            class="eq-math">$D=\dfrac{\Gamma\,\lambda^2}{6}$</span></div>
+      </div>
+      <div class="bc-tags">
+        <span class="bc-tag">$C(x,0)=0$</span>
+        <span class="bc-tag">$C(\infty,t)=0$</span>
+        <span class="bc-tag">$\int_{0}^{\infty}C\,dx=M$</span>
+      </div>
+    </header>
+
+    <!-- 3D + Controls -->
+    <div class="sim-layout">
+      <div class="viewport-container" id="viewport">
+        <div class="viewport-label">3D Atom View</div>
+        <div class="time-display" id="timeDisplay">t = 0.00 s</div>
+        <div class="atom-count-display" id="atomCount">2000 atoms</div>
+      </div>
+      <div class="controls-panel">
+        <h2>Controls</h2>
+        <div class="control-group">
+          <label>Jumping Frequency (Γ) <span class="val" id="gammaVal">20 Hz</span></label>
+          <input type="range" id="gammaSlider" min="1" max="100" value="20" step="1">
+        </div>
+        <div class="control-group">
+          <label>Jump Length (λ) <span class="val" id="lambdaVal">0.50 µm</span></label>
+          <input type="range" id="lambdaSlider" min="10" max="200" value="50" step="5">
+        </div>
+        <div class="control-group">
+          <label><span id="atomsLabel">Number of Atoms</span> <span class="val" id="atomsVal">2000</span></label>
+          <input type="range" id="atomsSlider" min="200" max="5000" value="2000" step="100">
+        </div>
+        <div class="control-group">
+          <label>Sim Speed <span class="val" id="speedVal">1.0×</span></label>
+          <input type="range" id="speedSlider" min="1" max="50" value="10" step="1">
+        </div>
+        <div class="derived-values">
+          <div class="row"><span class="label">D = Γλ²/6</span><span class="value" id="dVal">0.8333 µm²/s</span></div>
+          <div class="row"><span class="label">√(2Dt)</span><span class="value" id="diffLenVal">0.00 µm</span></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn active" id="btnPlay">▶ Play</button>
+          <button class="btn" id="btnReset">↺ Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plot -->
+    <div class="plot-section">
+      <div class="plot-container">
+        <h3>Concentration Profile — Analytical vs Simulated</h3>
+        <div class="plot-canvas-wrap"><canvas id="plotCanvas"></canvas></div>
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-swatch" style="background:#00d4ff"></div><span id="legendAnalLabel">Analytical
+              erfc</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-swatch" style="background:rgba(255,159,67,.7)"></div><span>Simulated (histogram)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-banner">Made by <span class="name">Yash Kokane</span> using <span class="tool">Antigravity</span>
+    </div>
+  </div>
+
+  <script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/"
+} }
+</script>
+  <script type="module" src="js/main.js"></script>
+</body>
+
+</html>
