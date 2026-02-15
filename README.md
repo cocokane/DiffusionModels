@@ -8,7 +8,8 @@ An interactive 3D particle simulator that visualizes atomic diffusion governed b
 ## Demo
 
 
-<video controls src="https://github.com/user-attachments/assets/demo.mp4" title="path/to/video.mp4"></video>
+<iframe width="560" height="315" src="[[https://www.youtube.com/embed/video-id](https://github.com/cocokane/DiffusionModels/blob/main/screenshots/demo.mp4)](https://github.com/cocokane/DiffusionModels/blob/main/screenshots/demo.mp4)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 
 ---
 
