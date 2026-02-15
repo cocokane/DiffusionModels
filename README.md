@@ -7,9 +7,13 @@ An interactive 3D particle simulator that visualizes atomic diffusion governed b
 
 ## Demo
 
+<<<<<<< HEAD
 
 <iframe width="560" height="315" src="[[https://www.youtube.com/embed/video-id](https://github.com/cocokane/DiffusionModels/blob/main/screenshots/demo.mp4)](https://github.com/cocokane/DiffusionModels/blob/main/screenshots/demo.mp4)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
+=======
+![Demo — Case 1: Semi-Infinite Diffusion](screenshots/demo.gif)
+>>>>>>> 8229958 (I guess videos don't render on README, using GIF)
 
 ---
 
