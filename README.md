@@ -1,19 +1,13 @@
 # Fick's Law — 3D Diffusion Simulator
 
 
-An interactive 3D particle simulator that visualizes atomic diffusion governed by Fick's laws. Built as a personal exploration project alongside the **Kinetics** course at **Rensselaer Polytechnic Institute**, taught by **Prof. Jian Shi** (not for grades — just because diffusion is fascinating). Vibe-coded overnight for fun using [Antigravity](https://antigravity.dev).
+An interactive 3D particle simulator that visualizes atomic diffusion governed by Fick's laws. Built as a personal exploration project alongside the **Kinetics** course at **Rensselaer Polytechnic Institute**, taught by **Prof. Jian Shi** (not for grades — just because diffusion is kinda cool and ). Vibe-coded overnight for fun using [Antigravity](https://antigravity.dev).
 
 ![Full Overview](screenshots/full_overview.png)
 
 ## Demo
 
-<<<<<<< HEAD
-
-<iframe width="560" height="315" src="[[https://www.youtube.com/embed/video-id](https://github.com/cocokane/DiffusionModels/blob/main/screenshots/demo.mp4)](https://github.com/cocokane/DiffusionModels/blob/main/screenshots/demo.mp4)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-=======
 ![Demo — Case 1: Semi-Infinite Diffusion](screenshots/demo.gif)
->>>>>>> 8229958 (I guess videos don't render on README, using GIF)
 
 ---
 
