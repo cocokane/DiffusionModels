@@ -36,6 +36,7 @@ const plot = new PlotManager(plotCanvas);
 // ── Case switching ──
 const caseBtns = document.querySelectorAll('.case-btn');
 const caseHeaders = document.querySelectorAll('.case-header');
+const caseDetails = document.querySelectorAll('.case-details');
 
 function switchCase(n) {
     sim.setCase(n);
@@ -47,6 +48,7 @@ function switchCase(n) {
 
     // Header visibility
     caseHeaders.forEach(h => h.style.display = parseInt(h.dataset.case) === n ? '' : 'none');
+    caseDetails.forEach(d => d.style.display = parseInt(d.dataset.case) === n ? '' : 'none');
 
     legendAnalLabel.textContent = CASE_META[n].analyticsLabel;
 

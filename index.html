@@ -158,7 +158,7 @@
     /* Header */
     header {
       text-align: center;
-      padding: 18px 20px 6px;
+      padding: 10px 20px 4px;
     }
 
     header h1 {
@@ -274,6 +274,16 @@
       font-size: 0.76rem !important;
     }
 
+    .case-summary {
+      font-size: 0.85rem;
+      color: var(--dim);
+      margin-top: 4px;
+    }
+
+    .math-details-section {
+      padding: 4px 14px 8px;
+    }
+
     /* Layout */
     .sim-layout {
       display: flex;
@@ -289,7 +299,7 @@
       overflow: hidden;
       border: 1px solid var(--border);
       background: #08081a;
-      min-height: 400px;
+      min-height: 300px;
     }
 
     .viewport-container canvas {
@@ -546,22 +556,22 @@
     <button class="case-btn active" data-case="1">
       <div class="case-num">1</div>
       <div>
-        <div class="case-title">Semi-Infinite</div>
+        <div class="case-title">Semi-infinite Diffusion</div>
         <div class="case-desc">Fixed surface C₀</div>
       </div>
     </button>
     <button class="case-btn" data-case="2">
       <div class="case-num">2</div>
       <div>
-        <div class="case-title">Planar Source</div>
-        <div class="case-desc">Infinite medium</div>
+        <div class="case-title">Planar Source in Infinite Medium</div>
+        <div class="case-desc">Fixed Atoms, Along X-axis</div>
       </div>
     </button>
     <button class="case-btn" data-case="3">
       <div class="case-num">3</div>
       <div>
-        <div class="case-title">Thin Film</div>
-        <div class="case-desc">Semi-infinite body</div>
+        <div class="case-title">Planar Source in Semi-Infinite Medium</div>
+        <div class="case-desc">Fixed Atoms, Along Positive X-axis</div>
       </div>
     </button>
   </nav>
@@ -571,83 +581,23 @@
 
     <!-- Case 1 Header -->
     <header class="case-header" data-case="1">
-      <h1>Case 1 — Semi-Infinite Diffusion</h1>
-      <div class="equation-header">
-        <div class="param-legend">
-          <div class="param-legend-title">Parameters</div>
-          <div class="param-row"><span class="param-sym">C(x,t)</span><span class="param-desc">— concentration
-              profile</span></div>
-          <div class="param-row"><span class="param-sym">C₀</span><span class="param-desc">— surface
-              concentration</span></div>
-          <div class="param-row"><span class="param-sym">D</span><span class="param-desc">— diffusion coefficient</span>
-          </div>
-          <div class="param-row"><span class="param-sym">√(2Dt)</span><span class="param-desc">— diffusion length
-              estimate</span></div>
-        </div>
-        <div class="eq-card"><span class="eq-label">Solution</span><span
-            class="eq-math">$C(x,t)=C_0\;\text{erfc}\!\left(\dfrac{x}{2\sqrt{Dt}}\right)$</span></div>
-        <div class="eq-card"><span class="eq-label">Diffusivity</span><span
-            class="eq-math">$D=\dfrac{\Gamma\,\lambda^2}{6}$</span></div>
-      </div>
-      <div class="bc-tags">
-        <span class="bc-tag">$C(0,t)=C_0$ (fixed surface)</span>
-        <span class="bc-tag">$C(x,0)=0$ (initial)</span>
-        <span class="bc-tag">$C(\infty,t)=0$</span>
-      </div>
+      <h1>Case 1 — Semi-Infinite Surface Diffusion</h1>
+      <p class="case-summary">Diffusion from a constant-concentration surface into a semi-infinite solid (infinite along
+        the Positive X-axis). <br> Scroll down for the analytical solution.</p>
     </header>
 
     <!-- Case 2 Header -->
     <header class="case-header" data-case="2" style="display:none">
-      <h1>Case 2 — Instantaneous Planar Source</h1>
-      <div class="equation-header">
-        <div class="param-legend">
-          <div class="param-legend-title">Parameters</div>
-          <div class="param-row"><span class="param-sym">C(x,t)</span><span class="param-desc">— concentration
-              profile</span></div>
-          <div class="param-row"><span class="param-sym">M</span><span class="param-desc">— mass per unit area</span>
-          </div>
-          <div class="param-row"><span class="param-sym">D</span><span class="param-desc">— diffusion coefficient</span>
-          </div>
-          <div class="param-row"><span class="param-sym">√(2Dt)</span><span class="param-desc">— diffusion length
-              estimate</span></div>
-        </div>
-        <div class="eq-card"><span class="eq-label">Solution</span><span class="eq-math">$C(x,t)=\dfrac{M}{2\sqrt{\pi D
-            t}}\;\exp\!\left(-\dfrac{x^2}{4Dt}\right)$</span></div>
-        <div class="eq-card"><span class="eq-label">Diffusivity</span><span
-            class="eq-math">$D=\dfrac{\Gamma\,\lambda^2}{6}$</span></div>
-      </div>
-      <div class="bc-tags">
-        <span class="bc-tag">$C(x,0)=0$</span>
-        <span class="bc-tag">$C(\pm\infty,t)=0$</span>
-        <span class="bc-tag">$\int_{-\infty}^{+\infty}C\,dx=M$</span>
-      </div>
+      <h1>Case 2 — Planar Source in Infinite Medium</h1>
+      <p class="case-summary">An thin film of atoms at the origin spreads symmetrically through an infinite
+        medium along the Positive and Negative X-axis. <br> Scroll down for the analytical solution.</p>
     </header>
 
     <!-- Case 3 Header -->
     <header class="case-header" data-case="3" style="display:none">
-      <h1>Case 3 — Thin Film Geometry</h1>
-      <div class="equation-header">
-        <div class="param-legend">
-          <div class="param-legend-title">Parameters</div>
-          <div class="param-row"><span class="param-sym">C(x,t)</span><span class="param-desc">— concentration
-              profile</span></div>
-          <div class="param-row"><span class="param-sym">M</span><span class="param-desc">— mass per unit area</span>
-          </div>
-          <div class="param-row"><span class="param-sym">D</span><span class="param-desc">— diffusion coefficient</span>
-          </div>
-          <div class="param-row"><span class="param-sym">√(2Dt)</span><span class="param-desc">— diffusion length
-              estimate</span></div>
-        </div>
-        <div class="eq-card"><span class="eq-label">Solution</span><span class="eq-math">$C(x,t)=\dfrac{M}{\sqrt{\pi D
-            t}}\;\exp\!\left(-\dfrac{x^2}{4Dt}\right)$</span></div>
-        <div class="eq-card"><span class="eq-label">Diffusivity</span><span
-            class="eq-math">$D=\dfrac{\Gamma\,\lambda^2}{6}$</span></div>
-      </div>
-      <div class="bc-tags">
-        <span class="bc-tag">$C(x,0)=0$</span>
-        <span class="bc-tag">$C(\infty,t)=0$</span>
-        <span class="bc-tag">$\int_{0}^{\infty}C\,dx=M$</span>
-      </div>
+      <h1>Case 3 — Planar Source in Semi-Infinite Medium</h1>
+      <p class="case-summary">A thin film of atoms diffuses into a semi-infinite body along the Positive X-axis. <br>
+        Scroll down for the analytical solution.</p>
     </header>
 
     <!-- 3D + Controls -->
@@ -699,6 +649,82 @@
           <div class="legend-item">
             <div class="legend-swatch" style="background:rgba(255,159,67,.7)"></div><span>Simulated (histogram)</span>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Math Details (below plot) -->
+    <div class="math-details-section">
+      <div class="case-details" data-case="1">
+        <div class="equation-header">
+          <div class="param-legend">
+            <div class="param-legend-title">Parameters</div>
+            <div class="param-row"><span class="param-sym">C(x,t)</span><span class="param-desc">— concentration
+                profile</span></div>
+            <div class="param-row"><span class="param-sym">C₀</span><span class="param-desc">— surface
+                concentration</span></div>
+            <div class="param-row"><span class="param-sym">D</span><span class="param-desc">— diffusion
+                coefficient</span></div>
+            <div class="param-row"><span class="param-sym">√(2Dt)</span><span class="param-desc">— diffusion length
+                estimate</span></div>
+          </div>
+          <div class="eq-card"><span class="eq-label">Solution</span><span
+              class="eq-math">$C(x,t)=C_0\;\text{erfc}\!\left(\dfrac{x}{2\sqrt{Dt}}\right)$</span></div>
+          <div class="eq-card"><span class="eq-label">Diffusivity</span><span
+              class="eq-math">$D=\dfrac{\Gamma\,\lambda^2}{6}$</span></div>
+        </div>
+        <div class="bc-tags">
+          <span class="bc-tag">$C(0,t)=C_0$ (fixed surface)</span>
+          <span class="bc-tag">$C(x,0)=0$ (initial)</span>
+          <span class="bc-tag">$C(\infty,t)=0$</span>
+        </div>
+      </div>
+      <div class="case-details" data-case="2" style="display:none">
+        <div class="equation-header">
+          <div class="param-legend">
+            <div class="param-legend-title">Parameters</div>
+            <div class="param-row"><span class="param-sym">C(x,t)</span><span class="param-desc">— concentration
+                profile</span></div>
+            <div class="param-row"><span class="param-sym">M</span><span class="param-desc">— mass per unit area</span>
+            </div>
+            <div class="param-row"><span class="param-sym">D</span><span class="param-desc">— diffusion
+                coefficient</span></div>
+            <div class="param-row"><span class="param-sym">√(2Dt)</span><span class="param-desc">— diffusion length
+                estimate</span></div>
+          </div>
+          <div class="eq-card"><span class="eq-label">Solution</span><span class="eq-math">$C(x,t)=\dfrac{M}{2\sqrt{\pi
+              D t}}\;\exp\!\left(-\dfrac{x^2}{4Dt}\right)$</span></div>
+          <div class="eq-card"><span class="eq-label">Diffusivity</span><span
+              class="eq-math">$D=\dfrac{\Gamma\,\lambda^2}{6}$</span></div>
+        </div>
+        <div class="bc-tags">
+          <span class="bc-tag">$C(x,0)=0$</span>
+          <span class="bc-tag">$C(\pm\infty,t)=0$</span>
+          <span class="bc-tag">$\int_{-\infty}^{+\infty}C\,dx=M$</span>
+        </div>
+      </div>
+      <div class="case-details" data-case="3" style="display:none">
+        <div class="equation-header">
+          <div class="param-legend">
+            <div class="param-legend-title">Parameters</div>
+            <div class="param-row"><span class="param-sym">C(x,t)</span><span class="param-desc">— concentration
+                profile</span></div>
+            <div class="param-row"><span class="param-sym">M</span><span class="param-desc">— mass per unit area</span>
+            </div>
+            <div class="param-row"><span class="param-sym">D</span><span class="param-desc">— diffusion
+                coefficient</span></div>
+            <div class="param-row"><span class="param-sym">√(2Dt)</span><span class="param-desc">— diffusion length
+                estimate</span></div>
+          </div>
+          <div class="eq-card"><span class="eq-label">Solution</span><span class="eq-math">$C(x,t)=\dfrac{M}{\sqrt{\pi D
+              t}}\;\exp\!\left(-\dfrac{x^2}{4Dt}\right)$</span></div>
+          <div class="eq-card"><span class="eq-label">Diffusivity</span><span
+              class="eq-math">$D=\dfrac{\Gamma\,\lambda^2}{6}$</span></div>
+        </div>
+        <div class="bc-tags">
+          <span class="bc-tag">$C(x,0)=0$</span>
+          <span class="bc-tag">$C(\infty,t)=0$</span>
+          <span class="bc-tag">$\int_{0}^{\infty}C\,dx=M$</span>
         </div>
       </div>
     </div>
