@@ -1,7 +1,6 @@
-# Fick's Law — 3D Diffusion Simulator
+# Fick's Second Law — 3D Diffusion Simulator
 
-
-An interactive 3D particle simulator that visualizes atomic diffusion governed by Fick's laws. Built as a personal exploration project alongside the **Kinetics** course at **Rensselaer Polytechnic Institute**, taught by **Prof. Jian Shi** (not for grades — just because diffusion would be kinda fun to see happen to originate right through random walk, without just accepting all of that weird laplace transform stuff to get the analytical solutions. We compare the simulated and analytical solutions and they agree pretty well). Vibe-coded overnight using [Antigravity](https://antigravity.dev) (It's absolutely insane to work with it, do check it out, I used a lot of free Claude Opus tokens on it).
+An interactive 3D particle simulator that visualizes atomic diffusion governed by Fick's Second Law. Built as a personal exploration project alongside the **Kinetics** course at **Rensselaer Polytechnic Institute**, taught by **Prof. Jian Shi** (not for grades — just because diffusion would be kinda fun to see happen to originate right through random walk, without just accepting all of that weird laplace transform stuff to get the analytical solutions. We compare the simulated and analytical solutions and they agree pretty well). Vibe-coded overnight using [Antigravity](https://antigravity.dev) (It's absolutely insane to work with it, do check it out, I used a lot of free Claude Opus tokens on it).
 
 ![Full Overview](screenshots/full_overview.png)
 
